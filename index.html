@@ -491,16 +491,16 @@ const SHOPS = [
   {id:'kitchen',name:"Grandma's Kitchen",short:'kitchen',sign:"GRANDMA'S KITCHEN",staff:'baker',wall:['#EBC98F','#D9AE6E'],side:['#F4DDB0','#E8C78E'],trim:'#FFFFFF',floor:['#E6C59C','#D6B086'],mat:['#C9503C','#E9806B'],apron:'#E9806B',
    roomX:250,expandable:false,open:false,cm:1,rm:1,slots:KITCHEN_SLOTS,counter:'k_counter',cashier:'grandma',
    bakers:{start:1,max:2,costs:[0,150],stars:[0,3]},walkouts:false,patience:70,
-   goal:{level:16,stars:40},sg:.2,story:["Welcome, dear! Every big bakery starts small.","Let's sell my biscuits and cakes from the front room. Clear lines in the puzzle to earn stars for new things."]},
+   goal:{level:16,stars:40,list:[{t:'built'},{t:'st',id:'oven1',lv:3},{t:'served',n:60},{t:'st',id:'coffee1',lv:3},{t:'bakers',n:2},{t:'stars'},{t:'level'}]},sg:.2,story:["Welcome, dear! Every big bakery starts small.","Let's sell my biscuits and cakes from the front room. Clear lines in the puzzle to earn stars for new things."]},
   {id:'corner',name:'Corner Bakery',short:'bakery',sign:'BLOCK & BATTER',staff:'baker',wall:['#E07A8B','#C25E72'],side:['#F09AA8','#D97C8D'],trim:'#FFE8D6',floor:['#FBF3E4','#EAD9BA'],mat:['#FF5A7A','#FF8FA3'],apron:'#FFB547',
    roomX:350,expandable:true,expand:{cost:20000,stars:12},open:false,cm:8,rm:6,slots:CORNER_SLOTS,counter:'counter',cashier:'cashier',
    bakers:{start:2,max:4,costs:[0,0,6400,48000],stars:[0,0,8,20]},cleaners:{max:2,costs:[3000,40000],stars:[5,15]},walkouts:true,patience:55,
-   goal:{level:60,rating:3.5,cleaner:1},sg:.3,story:["Look at this! Our very own shop on the corner.","Busy shops get messy, so we'll need a cleaner. Keep customers happy and our rating will climb."]},
+   goal:{level:60,rating:3.5,cleaner:1,stars:25,list:[{t:'st',id:'oven1',lv:5},{t:'cleaner'},{t:'expand'},{t:'served',n:400},{t:'st',id:'coffee1',lv:6},{t:'bakers',n:3},{t:'built'},{t:'stars'},{t:'rating'},{t:'level'}]},sg:.3,story:["Look at this! Our very own shop on the corner.","Busy shops get messy, so we'll need a cleaner. Keep customers happy and our rating will climb."]},
   {id:'cafe',name:'Café-bakery',short:'café',sign:'BLOCK & BATTER CAFÉ',staff:'baker',wall:['#7DB7A3','#5E9A86'],side:['#A6D3C3','#83BCA8'],trim:'#FFF4E8',floor:['#FFFFFF','#DDD5E6'],mat:['#3E8F78','#7DB7A3'],apron:'#7DB7A3',
    roomX:350,expandable:false,open:true,cm:80,rm:40,slots:CAFE_SLOTS,counter:'counter',cashier:'cashier',
    bakers:{start:2,max:5,costs:[0,0,60000,300000,1.5e6],stars:[0,0,10,20,35]},cleaners:{max:2,costs:[40000,400000],stars:[8,20]},waiters:{max:3,costs:[90000,600000,3e6],stars:[10,25,40]},manager:{cost:2.5e6,stars:50},
    walkouts:true,patience:48,timed:true,
-   goal:{level:90,rating:4.0,manager:1},sg:.35,story:["A real café! People can sit down, relax and order more.","Waiters bring treats to the tables. Big builds take a little while now, so plan ahead. And we'll need a manager!"]},
+   goal:{level:90,rating:4.0,manager:1,stars:40,list:[{t:'cleaner'},{t:'st',id:'coffee1',lv:8},{t:'waiters',n:2},{t:'served',n:1000},{t:'st',id:'booth1',lv:5},{t:'st',id:'oven2',lv:6},{t:'built'},{t:'stars'},{t:'rating'},{t:'manager'},{t:'level'}]},sg:.35,story:["A real café! People can sit down, relax and order more.","Waiters bring treats to the tables. Big builds take a little while now, so plan ahead. And we'll need a manager!"]},
 ];
 const CH=()=>SHOPS[Math.min(S.shop,SHOPS.length-1)];
 const THEME=CH;
@@ -511,14 +511,21 @@ const stationLevel=()=>SLOTS.reduce((a,s)=>a+lvlOf(s.id),0);
 function applyChapter(){ const C=CH(); SLOTS=C.slots; EXPAND_COST=C.expand?C.expand.cost:0; EXPAND_STARS=C.expand?C.expand.stars:0; if(C.open) S.expanded=true; }
 function rating(){ const r=S.ratings||[]; return r.length?r.reduce((a,b)=>a+b,0)/r.length:3; }
 function addRating(v){ S.ratings=S.ratings||[]; S.ratings.push(v); if(S.ratings.length>30) S.ratings.shift(); }
-function goals(){ const C=CH(), g=C.goal; const G=[
-  {txt:`Build all ${SLOTS.length} stations`,cur:SLOTS.filter(s=>lvlOf(s.id)>0).length,need:SLOTS.length},
-  {txt:`Reach ${C.short} level ${g.level}`,cur:stationLevel(),need:g.level}];
-  if(g.stars) G.push({txt:`Earn ${g.stars} stars in the puzzle`,cur:Math.floor(S.chStars||0),need:g.stars});
-  if(g.rating) G.push({txt:`Customer rating ${g.rating.toFixed(1)} or better`,cur:(S.ratings||[]).length>=10?rating():Math.min(rating(),g.rating-.01),need:g.rating,dec:1});
-  if(g.cleaner) G.push({txt:'Hire a cleaner',cur:S.cleaners||0,need:1});
-  if(g.manager) G.push({txt:'Hire a manager',cur:S.manager||0,need:1});
-  return G; }
+function goals(){ const C=CH(), g=C.goal;
+  const one={
+    built:()=>({txt:`Build all ${SLOTS.length} stations`,cur:SLOTS.filter(s=>lvlOf(s.id)>0).length,need:SLOTS.length}),
+    level:()=>({txt:`Reach ${C.short} level ${g.level}`,cur:stationLevel(),need:g.level}),
+    stars:()=>({txt:`Earn ${g.stars} stars in the puzzle`,cur:Math.floor(S.chStars||0),need:g.stars}),
+    rating:()=>({txt:`Customer rating ${g.rating.toFixed(1)} or better`,cur:(S.ratings||[]).length>=10?rating():Math.min(rating(),g.rating-.01),need:g.rating,dec:1}),
+    cleaner:()=>({txt:'Hire a cleaner',cur:S.cleaners||0,need:1}),
+    manager:()=>({txt:'Hire a manager',cur:S.manager||0,need:1}),
+    st:x=>{ const sl=SLOTS.find(s=>s.id===x.id); return {txt:`${sl?sl.name:x.id} level ${x.lv}`,cur:lvlOf(x.id),need:x.lv}; },
+    served:x=>({txt:`Serve ${x.n} customers`,cur:S.served||0,need:x.n}),
+    bakers:x=>({txt:`Have ${x.n} bakers`,cur:S.helpers||0,need:x.n}),
+    waiters:x=>({txt:`Hire ${x.n} waiters`,cur:S.waiters||0,need:x.n}),
+    expand:()=>({txt:'Open the back room',cur:S.expanded?1:0,need:1}),
+  };
+  return (g.list||[{t:'built'},{t:'level'}]).map(x=>one[x.t](x)); }
 const goalsDone=()=>goals().every(x=>x.cur>=x.need);
 const skinOpen=k=>k.ads?((S.skinAds||{})[k.id]||0)>=k.ads:k.shop?S.shopsDone>=k.shop+1:Math.max(totalLevel(),S.peakLevel)>=k.need;
 const PRAISE = ['Sweet!','Tasty!','Delicious!','Scrumptious!','Master Baker!'];
@@ -1162,7 +1169,7 @@ function graduate(head){
   const old=CH(); S.outlets=S.outlets||[]; S.outlets.push({name:old.name,rate:baseRate()*staffMult()*.5});
   S.peakLevel=Math.max(S.peakLevel,totalLevel()); S.shop++; S.shopsDone=Math.max(S.shopsDone,S.shop);
   if(head){ S.coins+=slotCost(CH().slots[1])*3; addStars(10); }
-  S.built={oven1:1}; S.expanded=false; S.helpers=CH().bakers.start; S.cleaners=0; S.waiters=0; S.manager=0; S.earned=0; S.chStars=0; S.ratings=[]; S.building=null; S.rushUntil=0; S.goalToast=false;
+  S.built={oven1:1}; S.expanded=false; S.helpers=CH().bakers.start; S.cleaners=0; S.waiters=0; S.manager=0; S.earned=0; S.chStars=0; S.served=0; S.ratings=[]; S.building=null; S.rushUntil=0; S.goalToast=false;
   applyChapter(); custs.length=0; staff.length=0; crew.length=0; jobs.length=0; pops.length=0; for(const k in dirty) delete dirty[k]; sel=null; camInit=false; cashier.spr=CH().cashier;
   S.seenSkins=SKINS.filter(skinOpen).length; save(); renderBakery(); updateHud(); shopLayout();
   mood('wow'); say(`Welcome to the ${THEME().name}!`); SFX.upgrade(); confetti(); setTimeout(()=>storyModal(),600);
@@ -1187,9 +1194,10 @@ const shop=$('shop'); let sx2=shop.getContext('2d'); let DPR2=1, SW=360, SH=600;
 const K=.9;
 const cam={x:-100,y:160,z:1}; let camInit=false, camGoal=null;
 const BD_W=1250, BD_H=1250*.625, BD_CX=-58, BD_CY=196;
-function camLimits(){ const zmin=Math.max(SW/BD_W, SH/BD_H); return {zmin, zmax:Math.max(zmin*1.2,2.4)}; }
-function clampCam(){ const L=camLimits(); cam.z=Math.max(L.zmin,Math.min(L.zmax,cam.z)); const hw=SW/2/cam.z, hh=SH/2/cam.z; cam.x=Math.max(BD_CX-BD_W/2+hw,Math.min(BD_CX+BD_W/2-hw,cam.x)); cam.y=Math.max(BD_CY-BD_H/2+hh,Math.min(BD_CY+BD_H/2-hh,cam.y)); }
-function shopLayout(){ if($('bakeryView').hidden) return; const sc=$('scene'); SW=sc.clientWidth||360; SH=sc.clientHeight||600; DPR2=Math.min(window.devicePixelRatio||1,2); shop.width=Math.round(SW*DPR2); shop.height=Math.round(SH*DPR2); if(!camInit){ camInit=true; cam.z=Math.max(camLimits().zmin,Math.min(1.3,SW/430)); const p=iso(125,290); cam.x=p.X; cam.y=p.Y; } clampCam(); }
+const VIEW={w:780,h:600,cx:-45,cy:168}; /* pan area: the bakery plus a thin garden border */
+function camLimits(){ const zmin=Math.max(SW/VIEW.w, SH/VIEW.h); return {zmin, zmax:Math.max(zmin*1.6,2.6)}; }
+function clampCam(){ const L=camLimits(); cam.z=Math.max(L.zmin,Math.min(L.zmax,cam.z)); const hw=SW/2/cam.z, hh=SH/2/cam.z; cam.x=Math.max(VIEW.cx-VIEW.w/2+hw,Math.min(VIEW.cx+VIEW.w/2-hw,cam.x)); cam.y=Math.max(VIEW.cy-VIEW.h/2+hh,Math.min(VIEW.cy+VIEW.h/2-hh,cam.y)); }
+function shopLayout(){ if($('bakeryView').hidden) return; const sc=$('scene'); SW=sc.clientWidth||360; SH=sc.clientHeight||600; DPR2=Math.min(window.devicePixelRatio||1,2); shop.width=Math.round(SW*DPR2); shop.height=Math.round(SH*DPR2); if(!camInit){ camInit=true; cam.z=Math.max(camLimits().zmin*1.08,Math.min(1.7,SW/330)); const p=iso(125,290); cam.x=p.X; cam.y=p.Y; } clampCam(); }
 const iso=(x,y,z=0)=>({X:K*(x-y),Y:K/2*(x+y)-K*z});
 function topPlane(g,z){ g.transform(K,K/2,-K,K/2,0,-K*z); }
 function planeY(g,y0){ g.transform(K,K/2,0,-K,-K*y0,K/2*y0); }   // draw with (x, z)
@@ -1261,9 +1269,9 @@ function stepShop(dt,now){
       if(CH().walkouts && moodOf(c)>1.15){ const j=jobs.findIndex(j=>j.cust===c); if(j>=0) jobs.splice(j,1); c.state='out'; c.item=null; c.path=[{x:c.x,y:c.y+28},{x:DOOR_X,y:OUT_Y-30},{x:DOOR_X,y:OUT_Y+40}]; addRating(1); pops.push({x:c.x,y:c.y,text:'Too slow!',t:0,note:true}); return; }
       const qi=queue.indexOf(c); const q=QUEUE(Math.min(qi,5)); if(c.state==='in') c.path=[q]; const there=walk(c,dt);
       if(there && qi<2 && c.state==='in' && open){ c.state='order'; const opts=itemSlots(); const s=opts[R(opts.length)]; c.item=s.id; jobs.push({cust:c,slot:s}); cashier.talk=.6; }
-    } else if(c.state==='served'){ c.t+=dt; if(c.t>.3){ const seat=freeSeat(); if(!seat){ addRating(c.score||4); c.scored=true; } if(seat){ c.seat=seat.id; const p=seatOf(seat); c.path=[{x:c.x,y:c.y+24},{x:p.x,y:Math.max(p.y,c.y+24)},p]; c.state='toSeat'; } else { c.path=[{x:c.x,y:c.y+28},{x:DOOR_X,y:OUT_Y-30},{x:DOOR_X,y:OUT_Y+40}]; c.state='out'; } } }
+    } else if(c.state==='served'){ c.t+=dt; if(c.t>.3){ const seat=freeSeat(); if(!seat){ addRating(c.score||4); c.scored=true; S.served=(S.served||0)+1; } if(seat){ c.seat=seat.id; const p=seatOf(seat); c.path=[{x:c.x,y:c.y+24},{x:p.x,y:Math.max(p.y,c.y+24)},p]; c.state='toSeat'; } else { c.path=[{x:c.x,y:c.y+28},{x:DOOR_X,y:OUT_Y-30},{x:DOOR_X,y:OUT_Y+40}]; c.state='out'; } } }
     else if(c.state==='toSeat'){ if(walk(c,dt)){ c.state='sit'; c.t=0; const st=slotById(c.seat); c.dur=(st&&st.art==='c_booth'?5:3)+Math.random()*2.5; if(dirty[c.seat]){ c.score=Math.max(2,(c.score||4)-1); pops.push({x:c.x,y:c.y,text:'Messy table',t:0,note:true}); } c.waited=false; } }
-    else if(c.state==='sit'){ c.t+=dt; if(c.t>c.dur){ dirty[c.seat]=now; addRating(c.score||4); c.scored=true; c.seat=null; c.path=[{x:c.x+6,y:c.y+20},{x:DOOR_X,y:OUT_Y-30},{x:DOOR_X,y:OUT_Y+40}]; c.state='out'; } }
+    else if(c.state==='sit'){ c.t+=dt; if(c.t>c.dur){ dirty[c.seat]=now; addRating(c.score||4); c.scored=true; S.served=(S.served||0)+1; c.seat=null; c.path=[{x:c.x+6,y:c.y+20},{x:DOOR_X,y:OUT_Y-30},{x:DOOR_X,y:OUT_Y+40}]; c.state='out'; } }
     else if(c.state==='out'){ walk(c,dt); }
   });
   for(let i=custs.length-1;i>=0;i--){ const c=custs[i]; if(c.state==='out'&&!c.path.length) custs.splice(i,1); }
