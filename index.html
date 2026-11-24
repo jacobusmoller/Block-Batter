@@ -939,7 +939,10 @@ function floatText(t,rows,cols,lines){
   const el=document.createElement('div'); el.className='float'; el.textContent=t;
   let cx=W/2, cy=boardH/2; if(rows.length) cy=BP+(rows.reduce((a,b)=>a+b,0)/rows.length+.5)*cell; if(cols.length && !rows.length) cx=BP+(cols.reduce((a,b)=>a+b,0)/cols.length+.5)*cell;
   el.style.left=cx+'px'; el.style.top=cy+'px'; el.style.fontSize=(1.3+.35*Math.min(lines+combo,6))+'rem'; el.style.color=lines>=2?'#FFE15A':'#FFF4E8';
-  $('boardWrap').appendChild(el); setTimeout(()=>el.remove(),1050);
+  $('boardWrap').appendChild(el);
+  const maxW=W*.8, w=el.offsetWidth; if(w>maxW) el.style.fontSize=(parseFloat(getComputedStyle(el).fontSize)*maxW/w)+'px';
+  const hw=Math.min(el.offsetWidth,maxW)/2; el.style.left=Math.max(hw+W*.05,Math.min(W-hw-W*.05,cx))+'px';
+  setTimeout(()=>el.remove(),1050);
 }
 
 /* ---------- particles (pastries fly to the coin counter) ---------- */
