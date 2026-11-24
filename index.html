@@ -349,7 +349,7 @@ textarea.code{width:100%;height:110px;border-radius:12px;border:1px solid var(--
     <div class="scene" id="scene">
       <canvas id="shop" aria-label="Your bakery. Drag to look around, pinch to zoom, tap a station to build or upgrade it."></canvas>
       <button class="goal-chip" id="goalChip"><span class="gc-name" id="goalChipName">Corner Bakery</span><span class="gc-txt" id="goalChipTxt">Goals 0/4</span></button>
-      <div class="fabs"><button class="fab ev" data-open="event" id="fab-event" hidden><span class="ic"><img id="evFabImg" alt=""></span><span id="evFabTxt">Christmas</span><i class=dot id=evDot hidden></i></button><button class="fab" data-open="build" id="fab-build"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#8A4B1F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6l4 4"/><path d="M3 21l9-9"/><path d="M13 3l8 8-3 3-8-8z" fill="#FFB547"/></svg></span><span>Build</span><i class=dot id=buildDot hidden></i></button><button class="fab" data-open="staff" id="fab-staff"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#8A4B1F" stroke-width="2" stroke-linecap="round"><path d="M7 8a5 5 0 0 1 10 0" fill="#fff"/><circle cx="9" cy="6" r="2.6" fill="#fff"/><circle cx="15" cy="6" r="2.6" fill="#fff"/><circle cx="12" cy="11.5" r="3.2" fill="#F3C49A"/><path d="M5.5 21c.6-4 3.2-6 6.5-6s5.9 2 6.5 6" fill="#FFB547"/></svg></span><span>Staff</span></button><button class="fab" data-open="rewards" id="fab-rewards"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#8A4B1F" stroke-width="2" stroke-linejoin="round"><rect x="3.5" y="9" width="17" height="11" rx="2" fill="#FF8FA3"/><rect x="2.5" y="6.5" width="19" height="4" rx="1.5" fill="#FF5A7A"/><path d="M12 6.5V20"/><path d="M12 6.5c-1.5-3-5-3.5-5-1.2C7 7 10 6.5 12 6.5zM12 6.5c1.5-3 5-3.5 5-1.2C17 7 14 6.5 12 6.5z" fill="#FFE15A"/></svg></span><span>Rewards</span></button><button class="fab" data-open="decor" id="fab-decor"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#8A4B1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="2" fill="#FF8FA3"/><rect x="13" y="3" width="8" height="8" rx="2" fill="#3DDC97"/><rect x="3" y="13" width="8" height="8" rx="2" fill="#4D8BFF"/><rect x="13" y="13" width="8" height="8" rx="2" fill="#FFE15A"/></svg></span><span>Skins</span></button></div>
+      <div class="fabs"><button class="fab ev" data-open="event" id="fab-event" hidden><span class="ic"><img id="evFabImg" alt=""></span><span id="evFabTxt">Christmas</span><i class=dot id=evDot hidden></i></button><button class="fab" data-open="build" id="fab-build"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#8A4B1F" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 6l4 4"/><path d="M3 21l9-9"/><path d="M13 3l8 8-3 3-8-8z" fill="#FFB547"/></svg></span><span>Build</span><i class=dot id=buildDot hidden></i></button><button class="fab" data-open="staff" id="fab-staff"><i class=dot id=staffDot hidden></i><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#8A4B1F" stroke-width="2" stroke-linecap="round"><path d="M7 8a5 5 0 0 1 10 0" fill="#fff"/><circle cx="9" cy="6" r="2.6" fill="#fff"/><circle cx="15" cy="6" r="2.6" fill="#fff"/><circle cx="12" cy="11.5" r="3.2" fill="#F3C49A"/><path d="M5.5 21c.6-4 3.2-6 6.5-6s5.9 2 6.5 6" fill="#FFB547"/></svg></span><span>Staff</span></button><button class="fab" data-open="rewards" id="fab-rewards"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#8A4B1F" stroke-width="2" stroke-linejoin="round"><rect x="3.5" y="9" width="17" height="11" rx="2" fill="#FF8FA3"/><rect x="2.5" y="6.5" width="19" height="4" rx="1.5" fill="#FF5A7A"/><path d="M12 6.5V20"/><path d="M12 6.5c-1.5-3-5-3.5-5-1.2C7 7 10 6.5 12 6.5zM12 6.5c1.5-3 5-3.5 5-1.2C17 7 14 6.5 12 6.5z" fill="#FFE15A"/></svg></span><span>Rewards</span></button><button class="fab" data-open="decor" id="fab-decor"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#8A4B1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="3" width="8" height="8" rx="2" fill="#FF8FA3"/><rect x="13" y="3" width="8" height="8" rx="2" fill="#3DDC97"/><rect x="3" y="13" width="8" height="8" rx="2" fill="#4D8BFF"/><rect x="13" y="13" width="8" height="8" rx="2" fill="#FFE15A"/></svg></span><span>Skins</span></button></div>
       <button class="mascot-fab" id="mascotFab"><img id="mascotFabImg" alt=""><span id="mascotFabTxt">Mascot</span></button>
       <div class="sel-wrap" id="selWrap">
       <div class="empty-banner" id="emptyBanner" hidden><span id="needTxt">You need more stars. Clear lines in the puzzle to earn them.</span><button id="bakeNow">Play puzzle</button></div>
@@ -530,15 +530,26 @@ const ECPM = {rew:10, inter:6}; // USD per 1,000, tier-1 assumption from the res
 
 
 /* ---------- background music: soft loop, Christmas version during the event ---------- */
-const MUS={el:null,key:'',vol:.32,started:false};
+/* Web Audio loop: gapless. MP3 files carry silent encoder padding at both ends, which makes <audio loop> click and pause.
+   We decode once, find where the sound really starts and ends, and loop exactly that span. */
+const MUS={ac:null,out:null,key:'',vol:.32,started:false,bufs:{},cur:null,loading:{}};
 function musicWant(){ return S.music!==false&&!document.hidden; }
+function musAC(){ if(!MUS.ac){ try{ MUS.ac=new (window.AudioContext||window.webkitAudioContext)(); MUS.out=MUS.ac.createGain(); MUS.out.gain.value=1; MUS.out.connect(MUS.ac.destination); }catch(e){ MUS.ac=null; } } return MUS.ac; }
+function musLoad(key){ if(MUS.bufs[key]||MUS.loading[key]) return; const ac=musAC(); if(!ac) return; MUS.loading[key]=1;
+  fetch(BB_MUSIC[key]).then(r=>r.arrayBuffer()).then(ab=>new Promise((res,rej)=>{ const p=ac.decodeAudioData(ab,res,rej); if(p&&p.then) p.then(res,rej); })).then(buf=>{
+    const d=buf.getChannelData(0), n=d.length, th=1e-4; let a=0,b=n-1; while(a<n&&Math.abs(d[a])<th) a++; while(b>a&&Math.abs(d[b])<th) b--;
+    MUS.bufs[key]={buf,start:a/buf.sampleRate,end:(b+1)/buf.sampleRate}; MUS.loading[key]=0; musicTick(); }).catch(()=>{ MUS.loading[key]=0; }); }
+function musPlay(key){ const ac=MUS.ac, L=MUS.bufs[key]; const src=ac.createBufferSource(), g=ac.createGain(); src.buffer=L.buf; src.loop=true; src.loopStart=L.start; src.loopEnd=L.end;
+  src.connect(g); g.connect(MUS.out); const t=ac.currentTime; g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(MUS.vol,t+2.5); src.start(t,L.start); return {src,g}; }
 function musicTick(){
   if(!window.BB_MUSIC||!MUS.started) return;
+  const ac=musAC(); if(!ac) return;
   const key=xmasOn()?'xmas':'bakery';
-  if(!musicWant()){ if(MUS.el&&!MUS.el.paused) MUS.el.pause(); return; }
-  if(MUS.key!==key){ const old=MUS.el; if(old){ let v=old.volume; const iv=setInterval(()=>{ v-=.04; if(v<=0){ clearInterval(iv); old.pause(); } else old.volume=v; },60); }
-    const el=new Audio(BB_MUSIC[key]); el.loop=true; el.volume=0; MUS.el=el; MUS.key=key; el.play().catch(()=>{}); let v=0; const iv=setInterval(()=>{ v+=.03; if(v>=MUS.vol){ v=MUS.vol; clearInterval(iv); } el.volume=v; },80); return; }
-  if(MUS.el.paused) MUS.el.play().catch(()=>{});
+  if(!musicWant()){ if(ac.state==='running') ac.suspend().catch(()=>{}); return; }
+  if(ac.state!=='running') ac.resume().catch(()=>{});
+  if(MUS.key!==key){ if(!MUS.bufs[key]){ musLoad(key); return; }
+    const old=MUS.cur; if(old){ const t=ac.currentTime; old.g.gain.cancelScheduledValues(t); old.g.gain.setValueAtTime(old.g.gain.value,t); old.g.gain.linearRampToValueAtTime(0,t+1.5); try{ old.src.stop(t+1.6); }catch(e){} }
+    MUS.cur=musPlay(key); MUS.key=key; }
 }
 function musicStart(){ if(MUS.started) return; MUS.started=true; musicTick(); }
 ['pointerdown','keydown'].forEach(ev=>window.addEventListener(ev,musicStart,{once:true,capture:true}));
@@ -1001,7 +1012,13 @@ function updateHud(){
   updateMascotUI();
   const affordable=anyAffordable(); $('tabDot').hidden=!affordable||!$('bakeryView').hidden;
   $('hint').hidden=S.placedEver;
+  const pinOk=S.coins>=pinCost(); $('staffDot').hidden=!pinOk; pinNudge(pinOk);
 }
+/* friendly reminder to upgrade the golden rolling pin: only when affordable, at most every 4 minutes and 6 times a day */
+function pinNudge(ok){ const now=Date.now(); if(!ok||!S.placedEver||root.innerHTML) return; if(now-(S.pinNudgeAt||0)<4*60000||(S.daily.pin||0)>=6) return;
+  if(!S.pinNudgeAt){ S.pinNudgeAt=now-2*60000; return; } S.pinNudgeAt=now; S.daily.pin=(S.daily.pin||0)+1;
+  if(!$('playView').hidden){ say('Psst! Upgrade the golden rolling pin in Staff. More stars for every line!'); mood('happy'); }
+  else toast(`Rolling pin upgrade ready: +25% stars per line. Tap Staff.`); }
 function updateReroll(){ $('rerollTxt').textContent=`New pieces (${rerolls} left)`; $('rerollBtn').disabled=rerolls<=0||over; }
 
 /* ---------- modals and ads ---------- */
@@ -1188,7 +1205,8 @@ const HANDOFF={x:178,y:226};
 const BUN_AT={x:190,y:224};
 const IDLE=[{x:120,y:216},{x:150,y:208},{x:94,y:210},{x:70,y:204}];
 const DOOR_X=150, OUT_Y=470;
-const QUEUE=i=>i===0?{x:182,y:284}:i===1?{x:136,y:284}:{x:182,y:284+(i-1)*24};
+/* queue stands clearly on the floor in front of the counter (counter art reaches to about y 275) */
+const QUEUE=i=>i===0?{x:182,y:304}:i===1?{x:134,y:304}:{x:182,y:304+(i-1)*22};
 const SKIN_TONES=['#FFE0C2','#F1C27D','#D9A066','#A86B3C','#7A4A26'];
 const CUST_COLORS=['#FF5A7A','#4D8BFF','#3DDC97','#A86BFF','#FFB547','#7FD1FF','#FF8FA3'];
 const HATS=['none','beanie','cap','bow','none','top'];
