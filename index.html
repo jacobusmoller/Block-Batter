@@ -186,7 +186,7 @@ button:disabled{cursor:default;opacity:.45}
 .sheet-body{overflow-y:auto;flex:1;min-height:0;padding:0 max(16px,env(safe-area-inset-right,0px)) max(16px,env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
 .sheet-body .panel{display:flex;flex-direction:column;gap:10px}
 .blist{display:flex;flex-direction:column;gap:8px}
-.brow{display:grid;grid-template-columns:48px 1fr auto;gap:12px;align-items:center;background:var(--plum-2);border:1px solid var(--line);border-radius:16px;padding:8px 12px;text-align:left;width:100%}
+.brow{display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:12px;align-items:center;background:var(--plum-2);border:1px solid var(--line);border-radius:16px;padding:8px 12px;text-align:left;width:100%}
 .brow img{width:48px;height:48px;object-fit:contain}
 .brow .nm{font-family:var(--font-display);font-weight:600;font-size:1rem}
 .brow .ds{font-size:.76rem;color:var(--muted)}
@@ -283,6 +283,7 @@ textarea.code{width:100%;height:110px;border-radius:12px;border:1px solid var(--
 .tut .dots{display:flex;gap:6px}.tut .dots i{width:8px;height:8px;border-radius:50%;background:var(--line)}.tut .dots i.on{background:var(--mango)}
 .age{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms !important;animation-iteration-count:1 !important}}
+.btag{display:table;margin:2px 0;padding:1px 7px;border-radius:999px;font-size:.66rem;font-weight:800;vertical-align:middle;white-space:normal;line-height:1.3}.btag.need{background:#FFE7A3;color:#8A5200}.btag.best{background:#D8F5E3;color:#17703F}.brow.needed{box-shadow:inset 0 0 0 2px #F5C24A}
 </style>
 
 <div class="title" id="title">
@@ -1160,8 +1161,13 @@ function renderBuildList(){
   const key=rows.map(r=>`${r.s.id}${r.lv}${r.can?1:0}${r.open?1:0}`).join()+S.expanded+S.shop+(S.coins>=EXPAND_COST&&S.stars>=EXPAND_STARS);
   if(key===buildKey) return; buildKey=key;
   const img=k=>window.BB_ART&&BB_ART[k]?`<img src="${BB_ART[k]}" alt="">`:'<span></span>';
-  let h=rows.filter(r=>r.open).sort((a,b)=>(b.can-a.can)||(a.c-b.c)).map(r=>`<button class="brow${r.can?'':' cant'}" data-id="${r.s.id}">${img(r.s.art||r.s.kind)}<span><span class="nm">${nm(r.s)}</span><br><span class="ds">${r.lv?`Level ${r.lv} · ${fmtRate(r.s.rate*r.lv*shopMult())} coins/sec`:'Not built yet'}</span></span><span class="price">${r.lv?'Up':'Build'} ${COIN}${fmt(r.c)}${r.st?` ${STAR_ICON}${r.st}`:''}</span></button>`).join('');
-  if(CH().expandable&&!S.expanded){ const can=S.coins>=EXPAND_COST&&S.stars>=EXPAND_STARS; h+=`<button class="brow${can?'':' cant'}" data-id="expand">${img('table')}<span><span class="nm">Back room</span><br><span class="ds">Room for 3 more stations and 2 tables</span></span><span class="price">Open ${COIN}${fmt(EXPAND_COST)} ${STAR_ICON}${EXPAND_STARS}</span></button>`; }
+  const gl=(CH().goal.list||[]), need=new Set();
+  for(const g of gl){ if(g.t==='st'&&lvlOf(g.id)<g.lv) need.add(g.id); if(g.t==='built') rows.forEach(r=>{ if(r.open&&!r.lv) need.add(r.s.id); }); }
+  const needExpand=gl.some(g=>g.t==='expand')&&!S.expanded;
+  const op=rows.filter(r=>r.open); let best=null; for(const r of op){ r.val=r.s.rate/r.c; if(!best||r.val>best.val) best=r; }
+  const tag=r=>((need.has(r.s.id)?'<span class="btag need">★ Needed to level up</span>':'')+(r===best?'<span class="btag best">★★ Top earner</span>':''))||'<br>';
+  let h=op.sort((a,b)=>(need.has(b.s.id)-need.has(a.s.id))||((b===best)-(a===best))||(b.can-a.can)||(a.c-b.c)).map(r=>`<button class="brow${r.can?'':' cant'}${need.has(r.s.id)?' needed':''}" data-id="${r.s.id}">${img(r.s.art||r.s.kind)}<span><span class="nm">${nm(r.s)}</span>${tag(r)}<span class="ds">${r.lv?`Level ${r.lv} · ${fmtRate(r.s.rate*r.lv*shopMult())} coins/sec`:'Not built yet'}</span></span><span class="price">${r.lv?'Up':'Build'} ${COIN}${fmt(r.c)}${r.st?` ${STAR_ICON}${r.st}`:''}</span></button>`).join('');
+  if(CH().expandable&&!S.expanded){ const can=S.coins>=EXPAND_COST&&S.stars>=EXPAND_STARS; const eb=`<button class="brow${can?'':' cant'}${needExpand?' needed':''}" data-id="expand">${img('table')}<span><span class="nm">Back room</span>${needExpand?'<span class="btag need">★ Needed to level up</span>':'<br>'}<span class="ds">Room for 3 more stations and 2 tables</span></span><span class="price">Open ${COIN}${fmt(EXPAND_COST)} ${STAR_ICON}${EXPAND_STARS}</span></button>`; h=needExpand?eb+h:h+eb; }
   $('buildList').innerHTML=h;
   $('buildList').querySelectorAll('.brow').forEach(b=>b.onclick=()=>{ sel=b.dataset.id; closeSheet(); focusSlot(sel); SFX.pick(); renderBakery(); });
 }
